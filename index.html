@@ -159,6 +159,55 @@ textarea:focus{outline:none;border-color:var(--ink)}
 .lk small{display:block;color:var(--mute);font-size:12px;margin-top:2px}
 .kv{display:grid;grid-template-columns:auto 1fr;gap:6px 14px;font-size:14px}
 .kv b{font-weight:400;color:var(--mute);font-size:12px;align-self:center}
+
+.ex .items{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px}
+.ex .sum{display:flex;align-items:baseline;gap:8px;flex-wrap:wrap}
+.ex .big{font-size:24px;font-weight:600;font-variant-numeric:tabular-nums}
+.ex .hk{font-size:13px;color:var(--mute)}
+.ex .rate{font-size:12px;color:var(--mute);margin-top:6px;display:flex;align-items:center;gap:6px}
+.ex .rate input{width:72px;padding:4px 6px;font-size:12px}
+.ex input,.ex select{border:1px solid var(--line);border-radius:8px;padding:9px;font:inherit;font-size:15px;color:var(--ink);background:#fcfcfa;min-width:0}
+.ex input:focus,.ex select:focus{outline:none;border-color:var(--ink)}
+.ex .row{display:flex;gap:6px;margin-top:8px}
+.ex .row>*{flex:1}
+.ex .add{margin-top:8px;width:100%;border:0;border-radius:10px;padding:11px;background:var(--ink);color:#fff;font-size:14px;cursor:pointer}
+.ex .stat{display:grid;grid-template-columns:repeat(5,1fr);gap:4px;margin-top:12px;text-align:center}
+.ex .stat div{background:var(--soft);border-radius:8px;padding:6px 2px;font-size:11px;color:var(--mute)}
+.ex .stat b{display:block;font-size:12px;color:var(--ink);font-weight:600;font-variant-numeric:tabular-nums;margin-top:2px}
+.ex .cats{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.ex .cats span{font-size:12px;background:var(--soft);border-radius:999px;padding:4px 10px;color:#55504c}
+.ex .lst{margin-top:12px;border-top:1px solid var(--line)}
+.ex .li{display:flex;align-items:center;gap:8px;padding:9px 0;border-bottom:1px solid var(--line);font-size:14px}
+.ex .li .m{flex:1;min-width:0}
+.ex .li .m small{display:block;font-size:11px;color:var(--mute)}
+.ex .li .a{font-variant-numeric:tabular-nums;font-weight:600}
+.ex .del{border:0;background:transparent;color:var(--mute);font-size:16px;cursor:pointer;padding:2px 6px}
+.ex .empty{font-size:12px;color:var(--mute);text-align:center;padding:10px 0}
+.fd{padding:10px 0;border-bottom:1px solid var(--line)}
+.fd:last-child{border-bottom:0}
+.fd .fn{font-size:14px;display:flex;align-items:center;gap:6px}
+.fd .fn .nm2{flex:1;min-width:0}
+.stars{display:flex;gap:2px;margin-top:4px}
+.stars button{border:0;background:transparent;font-size:22px;line-height:1;padding:2px;cursor:pointer;color:#d8d4cc}
+.stars button.on{color:#c9a24b}
+.fd input{width:100%;margin-top:6px;font-size:13px;padding:7px}
+
+.ex .me{display:flex;align-items:center;gap:6px;flex-wrap:wrap;font-size:13px;color:var(--mute);margin-bottom:12px}
+.ex .me .syn{margin-left:auto;font-size:11px}
+.fd .pr{margin-top:6px}
+.fd .pr input{margin-top:4px}
+.ex .who{display:flex;align-items:center;gap:6px;margin-top:8px;font-size:13px;color:var(--mute)}
+.ex .pp2{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:10px}
+.ex .pp2 div{background:var(--soft);border-radius:8px;padding:8px 10px;font-size:12px;color:var(--mute)}
+.ex .pp2 b{display:block;font-size:16px;color:var(--ink);font-variant-numeric:tabular-nums}
+.ex .pp2 small{font-size:11px}
+.ex .tag{flex:none;font-size:11px;border-radius:999px;padding:2px 8px;background:#ece6df;color:#8f7a66}
+.ex .tag.k{background:#dfe5ea;color:#6c8092}
+.fd .av{font-size:13px;font-weight:600;color:#c9a24b}
+.stars .who2,.oth .who2{font-size:12px;color:var(--mute);width:42px;flex:none;align-self:center}
+.oth{display:flex;align-items:baseline;gap:6px;margin-top:6px;font-size:13px}
+.oth .st{color:#c9a24b;letter-spacing:1px;flex:none}
+.oth .tx{color:#55504c;min-width:0}
 </style>
 </head>
 <body>
@@ -171,6 +220,7 @@ textarea:focus{outline:none;border-color:var(--ink)}
   <div class="wxrow"><div class="wxn" id="wxn">天氣預報（最高 / 最低 °C）</div><a class="wxa" href="https://tenki.jp/forecast/9/43/8210/40132/" target="_blank" rel="noopener">看實時天氣 ›</a></div>
   <div class="fl" id="flights"></div>
   <div id="groups"></div>
+  <div id="extra"></div>
   <div class="foot">點卡片看地址、詳情和路線，也可以修改文字<br>路線時間為事先估算（含等車），實時班次請用 Google Maps</div>
 </div>
 <button class="fab" id="fab">查路線</button>
@@ -444,12 +494,109 @@ if(typeof module!=='undefined'&&typeof window==='undefined'){module.exports={PLA
           `<div class="body" data-open="${id}"><div class="nm">${fmt(p.name)}</div><div class="sb">${fmt(p.sub)}</div></div>`+
           `<div class="arrow" data-open="${id}">›</div></div>`;}).join('')+`</div></div>`;
     }).join('');
+
+    if(typeof renderExtra==='function') renderExtra();
   }
   $('#groups').addEventListener('click',e=>{
     const tg=e.target.closest('[data-tog]'); if(tg){const id=tg.dataset.tog; OPEN.has(id)?OPEN.delete(id):OPEN.add(id); try{localStorage.setItem('fk_open',JSON.stringify([...OPEN]));}catch(e){} const el=tg.parentElement; el.classList.toggle('open',OPEN.has(id)); return;}
     const o=e.target.closest('[data-open]'); if(o){openPlace(o.dataset.open);}
   });
 
+
+
+  /* ---- 花銷 & 食物評分（Jen / Kevin 共用，Google 表格同步） ---- */
+  const API='https://script.google.com/macros/s/AKfycbywbIYgzKPLWAaiTrBM_k_SUgiQFt-D5meElK03AQX1yP-ThRk1Okj2TzHu8Hz4RVTE/exec';
+  const PEOPLE=['Jen','Kevin'];
+  const LS=(k,d)=>{try{const v=JSON.parse(localStorage.getItem(k)||'null');return v==null?d:v;}catch(e){return d;}};
+  const SS=(k,v)=>{try{localStorage.setItem(k,JSON.stringify(v));}catch(e){}};
+  let ME=LS('fk_me',''), RATE=LS('fk_rate',0.048);
+  let ST=LS('fk_state',{exp:[],rate:[],food:[]}), Q=LS('fk_q',[]);
+  let SYNC={s:API?'':'local',at:''}, syncing=false;
+  const ECAT=['餐飲','購物','交通','觀光','住宿','其他'];
+  const EDAYS=['11/16','11/17','11/18','11/19','11/20'];
+  const yen=n=>'¥'+Math.round(n).toLocaleString('en-US');
+  const hkd=n=>'HK$'+(n*RATE).toLocaleString('en-US',{maximumFractionDigits:0});
+  const uid=()=>Date.now().toString(36)+Math.random().toString(36).slice(2,6);
+  function applyOp(o){
+    if(o.op==='addExp'){ if(!ST.exp.some(x=>x.id===o.id)) ST.exp.push({id:o.id,d:o.d,c:o.c,a:o.a,n:o.n,p:o.p}); }
+    else if(o.op==='delExp'){ ST.exp=ST.exp.filter(x=>x.id!==o.id); }
+    else if(o.op==='rate'){ const r=ST.rate.find(x=>x.i===o.i&&x.p===o.p); if(r){r.s=o.s;r.t=o.t;} else ST.rate.push({i:o.i,p:o.p,s:o.s,t:o.t}); }
+    else if(o.op==='addFood'){ if(!ST.food.some(x=>x.id===o.id)) ST.food.push({id:o.id,name:o.name}); }
+    else if(o.op==='delFood'){ ST.food=ST.food.filter(x=>x.id!==o.id); ST.rate=ST.rate.filter(x=>x.i!==o.id); }
+  }
+  function doOp(o){ applyOp(o); SS('fk_state',ST); Q.push(o); SS('fk_q',Q); renderExtra(); sync(); }
+  async function sync(){
+    if(!API||syncing) return; syncing=true; SYNC.s='ing'; paintSync();
+    try{
+      let st;
+      if(Q.length){ const send=Q.slice(); const r=await fetch(API,{method:'POST',body:JSON.stringify(send)}); const j=await r.json(); if(!j.ok) throw 0; Q=Q.slice(send.length); SS('fk_q',Q); st=j.state; }
+      else { const r=await fetch(API); st=await r.json(); }
+      if(st&&st.exp){ ST=st; Q.forEach(applyOp); SS('fk_state',ST); }
+      const d=new Date(); SYNC={s:'ok',at:String(d.getHours()).padStart(2,'0')+':'+String(d.getMinutes()).padStart(2,'0')};
+    }catch(e){ SYNC={s:'err',at:SYNC.at}; }
+    syncing=false;
+    const ae=document.activeElement; if(ae&&$('#extra').contains(ae)&&(ae.tagName==='INPUT'||ae.tagName==='SELECT')) paintSync(); else renderExtra();
+  }
+  function syncText(){ if(SYNC.s==='local') return '只存在這部手機'; if(SYNC.s==='ing') return '同步中…'; if(SYNC.s==='err') return '連不上，'+(Q.length?Q.length+' 筆等待同步，':'')+'有網絡時會自動再試'; if(SYNC.s==='ok') return '已同步 '+SYNC.at+(Q.length?' · '+Q.length+' 筆等待中':''); return ''; }
+  function paintSync(){ document.querySelectorAll('.syn').forEach(el=>el.textContent=syncText()); }
+  if(API){ setInterval(()=>{ if(document.visibilityState==='visible') sync(); },30000); document.addEventListener('visibilitychange',()=>{ if(document.visibilityState==='visible') sync(); }); setTimeout(sync,300); }
+  const XG=[
+    {id:'exp',name:'花銷',bg:'#fff',bd:'#d8cdc1',ac:'#8f7a66',ic:'<rect x="3" y="6" width="18" height="13" rx="2.5"/><path d="M3 10 H21"/><circle cx="16.5" cy="14.5" r="1.3"/>'},
+    {id:'food',name:'食物評分',bg:'#fff',bd:'#c8d2d0',ac:'#6f8783',ic:'<path d="M12 3.5 L14.6 8.9 L20.5 9.6 L16.1 13.6 L17.3 19.5 L12 16.6 L6.7 19.5 L7.9 13.6 L3.5 9.6 L9.4 8.9 Z"/>'}
+  ];
+  function meBar(){ return `<div class="me"><span class="syn">${syncText()}</span></div>`; }
+  function expHTML(){
+    const E=ST.exp, tot=E.reduce((s,x)=>s+x.a,0);
+    const tk=todayKey(); const dd=EDAYS.includes(tk)?tk:'11/16';
+    const byD=EDAYS.map(d=>E.filter(x=>x.d===d).reduce((s,x)=>s+x.a,0));
+    const byP=PEOPLE.map(p=>[p,E.filter(x=>x.p===p).reduce((s,x)=>s+x.a,0)]);
+    const byC=ECAT.map(c=>[c,E.filter(x=>x.c===c).reduce((s,x)=>s+x.a,0)]).filter(x=>x[1]>0);
+    const payer=LS('fk_pay',PEOPLE[0]);
+    return meBar()+`<div class="sum"><span class="big">${yen(tot)}</span><span class="hk">≈ ${hkd(tot)}</span></div>
+      <div class="pp2">${byP.map(([p,v])=>`<div><span>${p} 付了</span><b>${yen(v)}</b><small>≈ ${hkd(v)}</small></div>`).join('')}</div>
+      <div class="rate">匯率 1 円 = <input id="exRate" type="number" step="0.0001" inputmode="decimal" value="${RATE}"> 港元</div>
+      <div class="stat">${EDAYS.map((d,i)=>`<div>${d}<b>${byD[i]?yen(byD[i]):'–'}</b></div>`).join('')}</div>
+      ${byC.length?`<div class="cats">${byC.map(([c,v])=>`<span>${c} ${yen(v)}</span>`).join('')}</div>`:''}
+      <div class="row"><select id="exD">${EDAYS.map(d=>`<option ${d===dd?'selected':''}>${d}</option>`).join('')}</select><select id="exC">${ECAT.map(c=>`<option>${c}</option>`).join('')}</select></div>
+      <div class="row"><input id="exA" type="number" inputmode="numeric" placeholder="金額（日元）"><input id="exN" placeholder="備註（可不填）"></div>
+      <div class="who">誰付：${PEOPLE.map(p=>`<button class="chip ${payer===p?'on':''}" data-pay="${p}">${p}</button>`).join('')}</div>
+      <button class="add" id="exAdd">加入</button>
+      <div class="lst">${E.length?E.slice().sort((x,y)=>x.d===y.d?0:(x.d<y.d?1:-1)).map(x=>`<div class="li"><span class="tag ${x.p===PEOPLE[1]?'k':''}">${esc(x.p||'?')}</span><div class="m">${esc(x.n||x.c)}<small>${esc(x.d)} · ${esc(x.c)}</small></div><div class="a">${yen(x.a)}</div><button class="del" data-del="${x.id}">×</button></div>`).join(''):'<div class="empty">還沒有記錄</div>'}</div>`;
+  }
+  function foodItems(){ const g=GROUPS.find(g=>g.id==='eat'); return g.ids.map(id=>({id,name:byId(id).name})).concat(ST.food.map(x=>({id:x.id,name:x.name,x:1}))); }
+  const stars=n=>'★'.repeat(n)+'☆'.repeat(5-n);
+  function foodHTML(){
+    const it=foodItems(); const R=ST.rate.filter(r=>r.s>0);
+    const avg=R.length?(R.reduce((s,r)=>s+r.s,0)/R.length).toFixed(1):'–';
+    return meBar()+`<div class="sum"><span class="big">${avg}</span><span class="hk">兩人平均分 · ${new Set(R.map(r=>r.i)).size} / ${it.length} 個已評</span></div>`+
+      it.map(x=>{
+        const all=ST.rate.filter(r=>r.i===x.id&&r.s>0);
+        const av=all.length?(all.reduce((s,r)=>s+r.s,0)/all.length).toFixed(1):'';
+        return `<div class="fd"><div class="fn"><span class="nm2">${fmt(x.name)}</span>${av?`<span class="av">${av}</span>`:''}${x.x?`<button class="del" data-fdel="${x.id}">×</button>`:''}</div>`+
+        PEOPLE.map(p=>{const r=ST.rate.find(q=>q.i===x.id&&q.p===p)||{};
+          return `<div class="pr"><div class="stars" data-fid="${x.id}" data-p="${p}"><span class="who2">${p}</span>${[1,2,3,4,5].map(n=>`<button data-s="${n}" class="${(r.s||0)>=n?'on':''}">★</button>`).join('')}</div>
+          <input data-fc="${x.id}" data-p="${p}" value="${esc(r.t||'')}" placeholder="${p} 的感想（可不填）"></div>`;}).join('')+`</div>`;}).join('')+
+      `<div class="row"><input id="fxN" placeholder="加其他食物，例如 明太子、草莓大福"><button class="add" id="fxAdd" style="flex:none;width:auto;margin-top:0;padding:0 16px">加入</button></div>`;
+  }
+  function renderExtra(){
+    $('#extra').innerHTML=XG.map(g=>`<div class="grp ex ${OPEN.has(g.id)?'open':''}" data-g="${g.id}"><div class="gh" data-tog="${g.id}" style="background:${g.bg};border-color:${g.bd}"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="${g.ac}" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">${g.ic}</svg><h2 style="color:${g.ac}">${g.name}</h2><span class="n">${g.id==='exp'?yen(ST.exp.reduce((s,x)=>s+x.a,0)):new Set(ST.rate.filter(r=>r.s>0).map(r=>r.i)).size+' 個已評'}</span><span class="cv">›</span></div><div class="items">${g.id==='exp'?expHTML():foodHTML()}</div></div>`).join('');
+  }
+  let PAY='';
+  $('#extra').addEventListener('click',e=>{
+    const tg=e.target.closest('[data-tog]'); if(tg){const id=tg.dataset.tog; OPEN.has(id)?OPEN.delete(id):OPEN.add(id); SS('fk_open',[...OPEN]); tg.parentElement.classList.toggle('open',OPEN.has(id)); if(OPEN.has(id)) sync(); return;}
+    const py=e.target.closest('[data-pay]'); if(py){ PAY=py.dataset.pay; SS('fk_pay',PAY); document.querySelectorAll('[data-pay]').forEach(b=>b.classList.toggle('on',b===py)); return; }
+    if(e.target.id==='exAdd'){ const a=parseFloat($('#exA').value); if(!(a>0)){toast('請輸入金額');return;}
+      const on=document.querySelector('[data-pay].on'); const p=on?on.dataset.pay:PEOPLE[0];
+      doOp({op:'addExp',id:uid(),d:$('#exD').value,c:$('#exC').value,a,n:$('#exN').value.trim(),p}); toast('已記錄'); return; }
+    const d=e.target.closest('[data-del]'); if(d){ if(!confirm('刪除這筆？'))return; doOp({op:'delExp',id:d.dataset.del}); return; }
+    const s=e.target.closest('[data-s]'); if(s){ const id=s.parentElement.dataset.fid, who=s.parentElement.dataset.p, n=+s.dataset.s; const r=ST.rate.find(x=>x.i===id&&x.p===who)||{}; doOp({op:'rate',i:id,p:who,s:(r.s===n)?0:n,t:r.t||''}); return; }
+    if(e.target.id==='fxAdd'){ const n=$('#fxN').value.trim(); if(!n)return; doOp({op:'addFood',id:'x'+uid(),name:n}); return; }
+    const fdl=e.target.closest('[data-fdel]'); if(fdl){ if(!confirm('刪除這個食物？兩個人的評分都會刪掉'))return; doOp({op:'delFood',id:fdl.dataset.fdel}); }
+  });
+  $('#extra').addEventListener('change',e=>{
+    if(e.target.id==='exRate'){ const v=parseFloat(e.target.value); if(v>0){RATE=v; SS('fk_rate',RATE); renderExtra();} return; }
+    const fc=e.target.dataset&&e.target.dataset.fc; if(fc){ const who=e.target.dataset.p; const r=ST.rate.find(x=>x.i===fc&&x.p===who)||{}; doOp({op:'rate',i:fc,p:who,s:r.s||0,t:e.target.value.trim()}); toast('已保存'); }
+  });
   let sheetMode=null, curPlace=null;
   function openSheet(){ $('#sheet').classList.add('on'); $('#mask').classList.add('on'); $('#sheet').scrollTop=0; }
   function closeSheet(){ $('#sheet').classList.remove('on'); $('#mask').classList.remove('on'); sheetMode=null; }
